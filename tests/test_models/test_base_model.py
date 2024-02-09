@@ -67,6 +67,7 @@ class TestBase(unittest.TestCase):
         obj_dict = self.my_model.to_dict()
 
         self.assertIsInstance(obj_dict, dict)
+        self.assertEqual(obj_dict["__class__"], "BaseModel")
         self.assertEqual(obj_dict["id"], self.my_model.id)
         self.assertEqual(obj_dict["created_at"], self.my_model.created_at.isoformat())
         self.assertEqual(obj_dict["updated_at"], self.my_model.updated_at.isoformat())
