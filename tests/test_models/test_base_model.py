@@ -5,9 +5,11 @@ Test base module
 ================
 """
 
+import unittest
 from datetime import datetime, timedelta
 from models.base_model import BaseModel
-import unittest
+from models.engine.file_storage import FileStorage
+import os
 
 class TestBase(unittest.TestCase):
     """
@@ -24,7 +26,9 @@ class TestBase(unittest.TestCase):
         """
         Cleans up after  each test case
         """
-        pass
+        storage_file = FileStorage._FileStorage__file_path
+        if os.path.exists(storage_file):
+            os.remove(storage_file)
 
     def test_attributes_on_creation(self):
         """
@@ -101,12 +105,16 @@ class TestBase(unittest.TestCase):
         updated_at_str = self.my_model.to_dict()["updated_at"]
         self.assertIsInstance(updated_at_str, str)
 
-    def test_reload_to_dict(self):
+    def test_reload(self):
         """
         Test reloading from the dictionary representaion
         """
         self.my_model.name = "Test reloading"
         self.my_model.save()
+        storage = FileStorage()
+        storage.reload()
+        reloaded_objects = storage.all()
+        self.assertIn("BaseModel." + self.my_model.id, reloaded_objects)
 
         obj_dict = self.my_model.to_dict()
 
