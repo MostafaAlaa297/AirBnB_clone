@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ===========
-base module
+Base module
 ===========
 """
 
@@ -13,7 +13,7 @@ class BaseModel:
     The base class
     """
 
-    def __init__(self, **kwargs, ):
+    def __init__(self, *args, **kwargs):
         """
         Initialization of the base module
         """
@@ -30,6 +30,8 @@ class BaseModel:
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
+            from models import storage
+            storage.new(self)
     
     def __str__(self):
         """
@@ -42,6 +44,8 @@ class BaseModel:
         Updates the time
         """
         self.updated_at = datetime.now()
+        from models import storage
+        storage.save()
 
     def to_dict(self):
         """
