@@ -8,6 +8,7 @@ Base module
 from datetime import datetime
 import uuid
 
+
 class BaseModel:
     """
     The base class
@@ -32,13 +33,15 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
             from models import storage
             storage.new(self)
-    
+
     def __str__(self):
         """
         Returns info about the model
         """
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
-    
+        return "[{}] ({}) {}".format(
+                self.__class__.__name__, self.id, self.__dict__
+                )
+
     def save(self):
         """
         Updates the time

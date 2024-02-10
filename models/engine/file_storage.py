@@ -9,6 +9,7 @@ import json
 import os
 from models.base_model import BaseModel
 
+
 class FileStorage:
     """
     Serialize instances to JSON and JSON to instaneces
@@ -33,16 +34,23 @@ class FileStorage:
         """
         Serialize __objects to json file_path
         """
-        obj_dict = {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
-        with open (FileStorage.__file_path, "w", encoding="utf-8") as json_file:
+        obj_dict = {
+                key: obj.to_dict()
+                for key, obj in FileStorage.__objects.items()
+                }
+        with open(
+                FileStorage.__file_path, "w", encoding="utf-8"
+                ) as json_file:
             json.dump(obj_dict, json_file)
 
-    def reload (self):
+    def reload(self):
         """
         Deserialize JSON to __objects
         """
         try:
-            with open (FileStorage.__file_path, "r", encoding="utf-8") as json_file:
+            with open(
+                    FileStorage.__file_path, "r", encoding="utf-8"
+                    ) as json_file:
                 obj_dict = json.load(json_file)
                 for key, obj_data in obj_dict.items():
                     class_name, obj_id = key.split(".")
@@ -51,6 +59,7 @@ class FileStorage:
                     FileStorage.__objects[key] = obj_instance
         except FileNotFoundError:
             pass
+
 
 storage = FileStorage()
 storage.reload()
