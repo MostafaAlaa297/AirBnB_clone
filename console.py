@@ -20,6 +20,10 @@ class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
     prompt = '(hbnb) '
 
+    def preloop(self):
+        """Initialization before prompting user for commands"""
+        models.storage.reload()
+
     def emptyline(self):
         """Called when an empty line is entered"""
         pass
@@ -43,6 +47,8 @@ class HBNBCommand(cmd.Cmd):
         else:
             new_instance = models.classes[args[0]]()
             new_instance.save()
+            models.storage.new(new_instance)
+            models.storage.save()
             print(new_instance.id)
 
     def do_destroy(self, arg):
