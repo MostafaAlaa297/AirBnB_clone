@@ -18,7 +18,15 @@ from models.review import Review
 class FileStorage:
     """File Storage class"""
     __file_path = "file.json"
-    __objects = {}
+    __objects = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review,
+    }
 
     def all(self):
         """Returns the dictionary __objects"""
@@ -47,6 +55,25 @@ class FileStorage:
                     cls = eval(cls_name)
                     obj = cls(**obj_attrs)
                     FileStorage.__objects[key] = obj
+        except FileNotFoundError:
+            pass
+
+    def serialize(self):
+        """Serializes the dictionary to a JSON string"""
+        serialized_data = {}
+        for key, value in self.__objects.items():
+            serialized_data[key] = value.to_dict()
+        return json.dumps(serialized_data)
+
+    def deserialize(self):
+        """Deserializes the JSON string to a dictionary of objects"""
+        try:
+            with open(self.__file_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key, obj_dict in data.items():
+                    class_name = obj_dict['__class__']
+                    cls = eval(class_name)
+                    self.__objects[key] = cls(**obj_dict)
         except FileNotFoundError:
             pass
 

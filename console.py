@@ -34,29 +34,16 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
-        if not arg:
-            print("** class name missing **")
-        elif arg not in models.classes:
-            print("** class doesn't exist **")
-        else:
-            new_instance = models.classes[arg]()
-            new_instance.save()
-            print(new_instance.id)
-
-    def do_show(self, arg):
-        """Prints the string representation of an instance"""
+        """Creates a new instance of the specified class"""
         args = arg.split()
         if not args:
             print("** class name missing **")
         elif args[0] not in models.classes:
             print("** class doesn't exist **")
-        elif len(args) < 2:
-            print("** instance id missing **")
         else:
-            key = "{}.{}".format(args[0], args[1])
-            all_objs = models.storage.all()
-            print(all_objs.get(key, "** no instance found **"))
+            new_instance = models.classes[args[0]]()
+            new_instance.save()
+            print(new_instance.id)
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
@@ -76,6 +63,20 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.save()
             else:
                 print("** no instance found **")
+
+    def do_show(self, arg):
+        """Prints the string representation of an instance"""
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+        elif args[0] not in models.classes:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        else:
+            key = "{}.{}".format(args[0], args[1])
+            all_objs = models.storage.all()
+            print(all_objs.get(key, "** no instance found **"))
 
     def do_all(self, arg):
         """Prints all string representations of all instances"""
