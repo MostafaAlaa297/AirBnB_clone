@@ -1,6 +1,12 @@
 #!/usr/bin/python3
-"""Console for AirBnB project"""
+"""
+===========
+Console module for the Airbnb project
+===========
+"""
+
 import cmd
+from models import storage
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -9,21 +15,32 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+classes = {
+    "BaseModel": BaseModel,
+    "User": User,
+    "State": State,
+    "City": City,
+    "Amenity": Amenity,
+    "Place": Place,
+    "Review": Review,
+}
+
 
 class HBNBCommand(cmd.Cmd):
-    """Command interpreter"""
+    """Command interpreter class"""
     prompt = '(hbnb) '
 
     def do_create(self, arg):
-        """Create new instance, save to JSON file, print id"""
-        if len(arg) == 0:
+        """Creates a new instance of the specified class"""
+        args = arg.split()
+        if not args:
             print("** class name missing **")
-        elif arg not in classes:
+        elif args[0] not in classes:
             print("** class doesn't exist **")
         else:
-            new_obj = classes[arg]()
-            new_obj.save()
-            print(new_obj.id)
+            new_instance = classes[args[0]]()
+            new_instance.save()
+            print(new_instance.id)
 
     def do_show(self, arg):
         """Show string representation of instance"""
