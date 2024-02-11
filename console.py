@@ -8,6 +8,12 @@ Console module for the Airbnb project
 import cmd
 import models
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -39,20 +45,6 @@ class HBNBCommand(cmd.Cmd):
             new_instance.save()
             print(new_instance.id)
 
-    def do_show(self, arg):
-        """Prints the string representation of an instance"""
-        args = arg.split()
-        if not args:
-            print("** class name missing **")
-        elif args[0] not in models.classes:
-            print("** class doesn't exist **")
-        elif len(args) < 2:
-            print("** instance id missing **")
-        else:
-            key = "{}.{}".format(args[0], args[1])
-            all_objs = models.storage.all()
-            print(all_objs.get(key, "** no instance found **"))
-
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
         args = arg.split()
@@ -71,6 +63,20 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.save()
             else:
                 print("** no instance found **")
+
+    def do_show(self, arg):
+        """Prints the string representation of an instance"""
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+        elif args[0] not in models.classes:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        else:
+            key = "{}.{}".format(args[0], args[1])
+            all_objs = models.storage.all()
+            print(all_objs.get(key, "** no instance found **"))
 
     def do_all(self, arg):
         """Prints all string representations of all instances"""
